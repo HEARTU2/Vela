@@ -68,9 +68,10 @@ every camera.
 ### The avoid rule
 
 With Avoid surveillance cameras on, `refreshFlockOnRoute` counts every route, and
-`CameraDetour.choose` takes the one with the fewest cameras, ties to the faster. It leads only
-if it passes fewer cameras than the fastest route and costs at most
-`min(25% of the fastest ETA, 600 s)` more, on traffic ETAs where they exist.
+`CameraDetour.choose` considers routes that pass fewer mapped cameras than the current leader
+and add at most `min(25% of the fastest ETA, 600 s)` over the fastest route. It picks the route
+with the fewest cameras among those that qualify, with ties going to the faster route. The
+comparison uses traffic ETAs where they exist.
 
 The winner moves to the top and is selected, and the "Fastest" tag stays on the fastest row.
 When nothing qualifies, the order stands and the counts still show. Counts carry the epoch of

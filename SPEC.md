@@ -2542,15 +2542,16 @@ since a cluster's centroid sits in the junction's middle. The corridor fetch is 
   segment's bearing as undirected lines, `min(d, 180 - d) <= 50` degrees. A camera with no
   facing counts. Applied to route counts, the avoid re-rank, the alerts and the route bar.
 - "Avoid surveillance cameras" (`FlockRouteAlert`, also the pickers' "Avoid cameras" chip, which
-  refetches the routes) re-ranks the alternates on offer. The fewest-camera route leads within
-  a detour of at most the lesser of 25 percent of the ETA and 10 minutes. It does not route
-  around cameras.
+  refetches the routes) re-ranks the alternates on offer. It considers routes that pass fewer
+  mapped cameras than the leader and add at most the lesser of 25 percent of the fastest
+  route's ETA and 10 minutes. Among those routes the fewest cameras wins, with ties going to
+  the faster route.
 - "Try side streets around cameras" (off by default, under the re-rank, drive mode only):
   `CameraDetour` clusters each route's cameras (join 40 m, nearest first, at most 3) and tries
   the points 150 m left and right of the road at each. A candidate whose count drops within the
   same cap is kept and the next cluster builds on it. Per trip: at most 6 route requests, 4 on
   one route; a cluster within 60 m of one already tried is skipped. `CameraDetour.choose` is
-  the one rule for both: fewest cameras, ties to the faster, beating the leader within the cap.
+  the same rule for selecting a new leader from the retained results.
 - A kept route leads the list and carries its waypoint plan (`Route.detourPlan`). A drive on it
   holds the detour points as silent stops, which every reroute and recheck routes through and
   nothing speaks or lists. `NavSession.withSilentVias` puts those still ahead back in after a
